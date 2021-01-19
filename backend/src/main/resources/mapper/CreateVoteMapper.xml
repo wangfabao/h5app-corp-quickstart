@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingtalk.h5app.quickstart.mapper.CreateVoteMapper">
+
+    <resultMap id="BaseMapper" type="com.dingtalk.h5app.quickstart.DTO.CreateVoteDTO">
+        <id column="vid" property="vid"/>
+        <result column="title" property="title"/>
+        <result column="details" property="details"/>
+        <result column="checkBox" property="checkBox"/>
+        <result column="endtime" property="endtime"/>
+        <result column="userId" property="userId"/>
+    </resultMap>
+
+    <insert id="insertVote" parameterType="com.dingtalk.h5app.quickstart.DTO.CreateVoteDTO">
+<!--    keyProperty="id" useGeneratedKeys="true">-->
+        insert into createvote(vid,title,details,checkBox,endtime,userId)
+        values (#{vid},#{title},#{details},#{checkBox},#{endtime},#{userId})
+    </insert>
+
+    <select id="findByVid" resultMap="BaseMapper">
+        select * from createvote
+        where vid = #{vid}
+    </select>
+
+<!--    findByUserIdAndVid-->
+    <select id="findByUserIdAndVid" resultMap="BaseMapper">
+        select * from createvote
+        where userId = #{userId} and vid = #{vid}
+    </select>
+
+</mapper>
