@@ -62,9 +62,6 @@ public class VoteController {
      * 先根据传进来的参数存到数据库再说
      * 然后拿出来比较
      * 返回的参数有：投票人数list，投票结果list
-     * 未解决：
-     * 多选情况：明细1，2，3...的票数，已经参与的人数,应参与人数？
-     * 单选情况：明细1或2或3.。的票数，已经参与的人数
      */
     @RequestMapping("/userVoting")
     public UserVoting userVoting(@RequestBody UserVotingVO userVotingVO) {
