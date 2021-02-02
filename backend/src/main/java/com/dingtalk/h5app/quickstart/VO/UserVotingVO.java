@@ -34,8 +34,12 @@ public class UserVotingVO {
 //    private Date endtime;
 
     /**
-     * 投票参与者
+     * 用户userId
      */
-    private String userId;
+    private String userid;
+    /**
+     * 用户名称
+     */
+    private String name;
 
 }

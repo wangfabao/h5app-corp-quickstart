@@ -3,18 +3,35 @@
 <mapper namespace="com.dingtalk.h5app.quickstart.mapper.CreateVoteMapper">
 
     <resultMap id="BaseMapper" type="com.dingtalk.h5app.quickstart.DTO.CreateVoteDTO">
-        <id column="vid" property="vid"/>
+        <id column="id" property="id"></id>
+        <result column="vid" property="vid"/>
         <result column="title" property="title"/>
         <result column="details" property="details"/>
         <result column="checkBox" property="checkBox"/>
-        <result column="endtime" property="endtime"/>
-        <result column="userId" property="userId"/>
+        <result column="startTime" property="startTime"/>
+        <result column="endTime" property="endTime"/>
+        <result column="createTime" property="createTime"/>
+        <result column="userId" property="userid"/>
+        <result column="userName" property="name"/>
+        <result column="userid_list" property="userid_list"/>
+        <result column="dept_id_list" property="dept_id_list"/>
+        <result column="state" property="state"/>
     </resultMap>
 
-    <insert id="insertVote" parameterType="com.dingtalk.h5app.quickstart.DTO.CreateVoteDTO">
-<!--    keyProperty="id" useGeneratedKeys="true">-->
-        insert into createvote(vid,title,details,checkBox,endtime,userId)
-        values (#{vid},#{title},#{details},#{checkBox},#{endtime},#{userId})
+<!--    findAllByTitleAndUserid-->
+    <select id="findAllByTitleAndUserid" resultMap="BaseMapper">
+        select * from createvote
+        <where>
+            <if test="title != null and title != ''">title like concat('%',#{title},'%')</if>
+            and userid = #{userid}
+        </where>
+        order by id asc
+    </select>
+
+    <insert id="insertVote" parameterType="com.dingtalk.h5app.quickstart.DTO.CreateVoteDTO"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into createvote(vid,title,details,checkBox,startTime,endTime,createTime,userId,userName,userid_list,dept_id_list,`state`)
+        values (#{vid},#{title},#{details},#{checkBox},#{startTime},#{endTime},#{createTime},#{userid},#{name},#{userid_list},#{dept_id_list},#{state})
     </insert>
 
     <select id="findByVid" resultMap="BaseMapper">
@@ -22,10 +39,40 @@
         where vid = #{vid}
     </select>
 
+    <!--    findByStartTime-->
+    <select id="findByStartTime" resultMap="BaseMapper">
+        select * from createvote where startTime = #{now}
+    </select>
+
+    <!--    findByStartTime-->
+    <select id="findByEndTime" resultMap="BaseMapper">
+        select * from createvote where endTime = #{now}
+    </select>
+
+<!--    findByState-->
+    <select id="findByState" resultMap="BaseMapper">
+        select * from createvote where `state` = 1
+    </select>
+
+<!--    updateState-->
+    <update id="updateState" parameterType="com.dingtalk.h5app.quickstart.DTO.CreateVoteDTO">
+        update createvote set `state` = #{state} where vid = #{vid}
+    </update>
+
+
+
+
+
+<!--    findAllCreateVote-->
+    <select id="findAllCreateVote" resultMap="BaseMapper">
+        select * from createvote
+    </select>
+
 <!--    findByUserIdAndVid-->
     <select id="findByUserIdAndVid" resultMap="BaseMapper">
-        select * from createvote
-        where userId = #{userId} and vid = #{vid}
+        select * from createvote where userid = #{userid} and vid =#{vid}
     </select>
+
+
 
 </mapper>

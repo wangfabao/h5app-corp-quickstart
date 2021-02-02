@@ -35,7 +35,8 @@ import static com.dingtalk.h5app.quickstart.config.UrlConstant.URL_USER_GET;
  * @date 2020/2/4
  */
 @RestController
-@CrossOrigin("*") // NOTE：此处仅为本地调试使用，为避免安全风险，生产环境请勿设置CORS为 '*'
+@CrossOrigin("/auth")
+//@CrossOrigin("*") // NOTE：此处仅为本地调试使用，为避免安全风险，生产环境请勿设置CORS为 '*'
 public class AuthController {
     private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dingtalk.h5app.quickstart.mapper.UserVotingPersonMapper">
+    <resultMap id="BaseMapper" type="com.dingtalk.h5app.quickstart.DTO.UserVotingPersonDTO">
+        <id column="id" property="id"/>
+        <result column="vid" property="vid"/>
+        <result column="userVotingChecks" property="userVotingChecks"/>
+        <result column="userId" property="userid"/>
+        <result column="userName" property="name"/>
+        <result column="userVotingStartTime" property="userVotingStartTime"/>
+    </resultMap>
+
+    <resultMap id="BaseMapper1" type="com.dingtalk.h5app.quickstart.DTO.UserVotingPersonExcelDTO">
+        <id column="id" property="id"/>
+        <result column="vid" property="vid"/>
+        <result column="userVotingChecks" property="userVotingChecks"/>
+        <result column="userId" property="userid"/>
+        <result column="userName" property="name"/>
+        <result column="userVotingStartTime" property="userVotingStartTime"/>
+    </resultMap>
+
+<!--    insertUserVoting-->
+    <insert id="insertUserVoting" parameterType="com.dingtalk.h5app.quickstart.DTO.UserVotingPersonDTO"
+            keyProperty="id" useGeneratedKeys="true">
+        insert into userVotingPerson(vid,userVotingChecks,userId,userName,userVotingStartTime)
+        values (#{vid},#{userVotingChecks},#{userid},#{name},#{userVotingStartTime})
+    </insert>
+
+<!--    findByVid-->
+    <select id="findByVid" resultMap="BaseMapper">
+        select userId from userVotingPerson where vid = #{vid}
+    </select>
+
+<!--    findByVid2-->
+    <select id="findByVid2" resultType="com.dingtalk.h5app.quickstart.pojo.JoinedVoteNumber">
+        select userId from userVotingPerson where vid = #{vid}
+    </select>
+
+<!--    findByVidAndUserId-->
+    <select id="findByVidAndUserId" resultMap="BaseMapper">
+        select * from userVotingPerson where vid = #{vid} and userId = #{userid}
+    </select>
+
+<!--    findVotingResultByVid-->
+    <select id="findVotingResultByVid" resultMap="BaseMapper1">
+        select * from userVotingPerson where vid = #{vid}
+    </select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.dingtalk.h5app.quickstart.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * service层返回对象列表封装
@@ -29,6 +30,16 @@ public class ServiceResult<T> implements Serializable {
         item.message = "success";
         return item;
     }
+//    public static <T> ServiceResult<T> success(long count, List<T> data) {
+//        ServiceResult<T> item = new ServiceResult<T>();
+//        item.success = true;
+//        item.count = count;
+//        item.data = data;
+//        item.code = "0";
+//        item.message = "success";
+//        return item;
+//    }
+
 
     public static <T> ServiceResult<T> failure(String errorCode, String errorMessage) {
         ServiceResult<T> item = new ServiceResult<T>();

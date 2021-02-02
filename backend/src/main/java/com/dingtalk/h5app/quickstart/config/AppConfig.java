@@ -1,5 +1,6 @@
 package com.dingtalk.h5app.quickstart.config;
 
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2020/2/4
  */
 @Configuration
+@Data
 public class AppConfig {
     @Value("${dingtalk.app_key}")
     private String appKey;
@@ -51,5 +53,9 @@ public class AppConfig {
 
     public void setCorpId(String corpId) {
         this.corpId = corpId;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.dingtalk.api.DefaultDingTalkClient;
 import com.dingtalk.api.DingTalkClient;
 import com.dingtalk.api.request.OapiDepartmentListRequest;
@@ -14,6 +16,7 @@ import com.dingtalk.api.response.OapiDepartmentListResponse.Department;
 import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
 import com.dingtalk.h5app.quickstart.config.AppConfig;
+import com.dingtalk.h5app.quickstart.config.ListToTree;
 import com.dingtalk.h5app.quickstart.domain.DepartmentDTO;
 import com.dingtalk.h5app.quickstart.domain.ServiceResult;
 import com.dingtalk.h5app.quickstart.domain.UserDTO;
@@ -38,13 +41,14 @@ import static com.dingtalk.h5app.quickstart.config.UrlConstant.URL_USER_SIMPLELI
  * @date 2020/2/4
  */
 @RestController
-@CrossOrigin("*") // NOTE：此处仅为本地调试使用，为避免安全风险，生产环境请勿设置CORS为 '*'
+@CrossOrigin("/contact")
+//@CrossOrigin("*") // NOTE：此处仅为本地调试使用，为避免安全风险，生产环境请勿设置CORS为 '*'
 public class ContactController {
     private static final Logger log = LoggerFactory.getLogger(ContactController.class);
 
     private TokenService tokenService;
     private AppConfig appConfig;
-
+    
     @Autowired
     public ContactController(
         TokenService tokenService,
@@ -54,8 +58,14 @@ public class ContactController {
         this.appConfig = appConfig;
     }
 
+    /**
+     * 获取部门列表
+     * @param id ：父部门ID。如果不传，默认部门为根部门，根部门ID为1。
+     * @return
+     */
     @GetMapping("/department/list")
-    public ServiceResult<List<DepartmentDTO>> listDepartment(
+//    public ServiceResult<List<DepartmentDTO>> listDepartment(
+    public Serializable listDepartment(
         @RequestParam(value = "id", required = false, defaultValue = "1") String id
     ) {
         String accessToken;
@@ -68,6 +78,7 @@ public class ContactController {
 
         DingTalkClient client = new DefaultDingTalkClient(URL_DEPARTMENT_LIST);
         OapiDepartmentListRequest request = new OapiDepartmentListRequest();
+        request.setFetchChild(true);    //是否递归部门的全部子部门。
         request.setId(id);
         request.setHttpMethod("GET");
 
@@ -91,17 +102,31 @@ public class ContactController {
                 departmentDTO.setCreateDeptGroup(department.getCreateDeptGroup());
                 departmentDTO.setAutoAddUser(department.getAutoAddUser());
                 departmentDTO.setParentid(department.getParentid());
+
+                departmentDTO.setTitle(department.getName());
+                departmentDTO.setKey(department.getId());
+                departmentDTO.setValue(department.getId());
                 results.add(departmentDTO);
             }
-            return ServiceResult.success(results);
+            JSONArray tree = ListToTree.getTree(JSONArray.parseArray(JSON.toJSONString(results)), "id", "parentid", "children");
+//            return ServiceResult.success(results);
+            return ServiceResult.success(tree);
         }
         return ServiceResult.success(Collections.emptyList());
     }
 
+    /**
+     * 获取部门用户
+     * @param id :获取部门用户的id
+     * @param offset :支持分页查询，与size参数同时设置时才生效，此参数代表偏移量，偏移量从0开始。
+     * @param size :支持分页查询，与offset参数同时设置时才生效，此参数代表分页大小，最大100。
+     * @param order :支持分页查询，部门成员的排序规则，默认不传是按自定义排序：entry_asc：代表按照进入部门的时间升序
+     * @return
+     */
     @GetMapping("/user/simplelist")
     public ServiceResult<List<UserDTO>> listDepartmentUsers(
         @RequestParam("department_id") Long id,
-        @RequestParam(name = "offset", required = false, defaultValue = "1") Long offset,
+        @RequestParam(name = "offset", required = false, defaultValue = "0") Long offset,
         @RequestParam(name = "size", required = false, defaultValue = "50") Long size,
         @RequestParam(name = "order", required = false, defaultValue = "entry_desc") String order
     ) {

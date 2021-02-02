@@ -31,14 +31,37 @@ public class CreateVoteVO {
     private Boolean checkBox;
 
     /**
+     * 投票开始时间
+     */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
+    private Date startTime;
+
+
+    /**
      * 投票截止时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date endtime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm",timezone = "GMT+8")
+    private Date endTime;
+
 
     /**
-     * 发起投票人
+     * 用户userId
      */
-    private String userId;
+    private String userid;
+    /**
+     * 用户名称
+     */
+    private String name;
+
+    /**
+     * userid_list:接收者的企业内部用户的userid列表，最大用户列表长度100。
+     */
+    private String userid_list;
+
+    /**
+     * dept_id_list:接收者的部门id列表，最大列表长度20。接收者是部门ID下包括子部门下的所有用户。
+     */
+    private String dept_id_list;
 }

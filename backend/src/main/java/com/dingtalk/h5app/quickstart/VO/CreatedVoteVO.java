@@ -1,4 +1,4 @@
-package com.dingtalk.h5app.quickstart.DTO;
+package com.dingtalk.h5app.quickstart.VO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateVoteDTO {
+public class CreatedVoteVO {
+
     /**
      * 主键id
      */
@@ -70,21 +71,10 @@ public class CreateVoteDTO {
     private String name;
 
     /**
-     * userid_list:接收者的企业内部用户的userid列表，最大用户列表长度100。
-     */
-    private String userid_list;
-
-    /**
-     * dept_id_list:接收者的部门id列表，最大列表长度20。接收者是部门ID下包括子部门下的所有用户。
-     */
-    private String dept_id_list;
-
-    /**
      * 投票状态
      *  0--未开始
      *  1--进行中
      *  2--已结束
      */
     private Integer state;
-
 }
